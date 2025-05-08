@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Shopping Cart</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .navbar { background: #333; padding: 10px; }
+    .navbar a { color: white; margin-right: 10px; text-decoration: none; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="index.html">Home</a>
+    <a href="shopping_cart.html">Shopping Cart</a>
+  </div>
+
+  <h1>Your Shopping Cart</h1>
+  <table id="cart-table">
+    <thead>
+      <tr><th>Product</th><th>Price</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const tbody = document.querySelector("#cart-table tbody");
+
+    if (cart.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='2'>Your cart is empty.</td></tr>";
+    } else {
+      cart.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${item.name}</td><td>$${item.price}</td>`;
+        tbody.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>
 
