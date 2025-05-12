@@ -3,43 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Shopping Cart</title>
+  <title>Shopping Cart Page</title>
   <style>
     body { font-family: Arial; padding: 20px; }
-    .navbar { background: #333; padding: 10px; }
-    .navbar a { color: white; margin-right: 10px; text-decoration: none; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    h1 { margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    input[type="number"] { width: 50px; text-align: center; }
+    .total { text-align: right; font-size: 1.2em; margin-top: 10px; }
+    .actions { text-align: right; margin-top: 20px; }
+    .actions button { padding: 10px 20px; margin-left: 10px; }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <a href="index.html">Home</a>
-    <a href="shopping_cart.html">Shopping Cart</a>
-  </div>
-
   <h1>Your Shopping Cart</h1>
+
   <table id="cart-table">
     <thead>
-      <tr><th>Product</th><th>Price</th></tr>
+      <tr>
+        <th>Product</th>
+        <th>Unit Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="cart-body"></tbody>
   </table>
 
-  <script>
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const tbody = document.querySelector("#cart-table tbody");
+  <div class="total" id="total-price">Total: $0.00</div>
 
-    if (cart.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='2'>Your cart is empty.</td></tr>";
-    } else {
-      cart.forEach(item => {
+  <div class="actions">
+    <button onclick="alert('Proceeding to payment...')">Pay</button>
+    <button onclick="alert('Proceeding to checkout...')">Checkout</button>
+  </div>
+
+  <script>
+    // 示例商品数据
+    const products = [
+      { name: "T-shirt", price: 19.99, quantity: 1 },
+      { name: "Jeans", price: 49.99, quantity: 2 },
+      { name: "Sneakers", price: 89.99, quantity: 1 }
+    ];
+
+    const cartBody = document.getElementById("cart-body");
+    const totalPriceDiv = document.getElementById("total-price");
+
+    function renderCart() {
+      cartBody.innerHTML = "";
+      let total = 0;
+
+      products.forEach((product, index) => {
+        const subtotal = product.price * product.quantity;
+        total += subtotal;
+
         const row = document.createElement("tr");
-        row.innerHTML = `<td>${item.name}</td><td>$${item.price}</td>`;
-        tbody.appendChild(row);
+        row.innerHTML = `
+          <td>${product.name}</td>
+          <td>$${product.price.toFixed(2)}</td>
+          <td>
+            <input type="number" min="1" value="${product.quantity}" 
+                   onchange="updateQuantity(${index}, this.value)">
+          </td>
+          <td>$${subtotal.toFixed(2)}</td>
+        `;
+        cartBody.appendChild(row);
       });
+
+      totalPriceDiv.textContent = `Total: $${total.toFixed(2)}`;
     }
+
+    function updateQuantity(index, newQty) {
+      const qty = parseInt(newQty);
+      if (!isNaN(qty) && qty > 0) {
+        products[index].quantity = qty;
+        renderCart();
+      }
+    }
+
+    renderCart();
   </script>
 </body>
 </html>
-
