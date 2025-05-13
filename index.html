@@ -48,7 +48,11 @@
   <div class="actions">
     <button onclick="handleCheckout()">Checkout</button>
   </div>
-
+  <div id="alipay-qr" style="display: none; margin-top: 20px;">
+  <h3>请用支付宝扫码付款：</h3>
+  <img src="https://github.com/lingyiwu01/Shopping/blob/main/Alipay.png?raw=true"
+       alt="支付宝付款码" width="200" />
+  </div>
   <script>
     const products = [
       { name: "Talk with me for 15 minutes", price: 4.99, quantity: 1, stock: 50 },
@@ -112,18 +116,25 @@
       const total = products.reduce((sum, item) => sum + item.price * item.quantity, 0);
       alert(`Payment method: ${payment}\nTotal amount: $${total.toFixed(2)}\nCheckout successful!`);
     }
-// 监听支付方式选择，控制二维码显示
+    
     document.querySelectorAll('input[name="payment"]').forEach(radio => {
       radio.addEventListener('change', () => {
         const selected = getSelectedPaymentMethod();
-        const qrDiv = document.getElementById("wechat-qr");
+        const wechatDiv = document.getElementById("wechat-qr");
+        const alipayDiv = document.getElementById("alipay-qr");
+
         if (selected === "WeChat Pay") {
-          qrDiv.style.display = "block";
+          wechatDiv.style.display = "block";
+          alipayDiv.style.display = "none";
+        } else if (selected === "Alipay") {
+          wechatDiv.style.display = "none";
+          alipayDiv.style.display = "block";
         } else {
-          qrDiv.style.display = "none";
+          wechatDiv.style.display = "none";
+          alipayDiv.style.display = "none";
         }
       });
-    });    
+    });
     renderCart();
   </script>
 </body>
