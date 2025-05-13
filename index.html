@@ -9,8 +9,9 @@
     h1 { margin-bottom: 20px; }
     table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-    input[type="number"] { width: 50px; text-align: center; }
+    input[type="number"] { width: 60px; text-align: center; }
     .total { text-align: right; font-size: 1.2em; margin-top: 10px; }
+    .payment { margin-top: 20px; }
     .actions { text-align: right; margin-top: 20px; }
     .actions button { padding: 10px 20px; margin-left: 10px; }
   </style>
@@ -32,17 +33,23 @@
 
   <div class="total" id="total-price">Total: $0.00</div>
 
+  <div class="payment">
+    <h3>Select Payment Method:</h3>
+    <label><input type="radio" name="payment" value="Bank Card"> Bank Card</label><br/>
+    <label><input type="radio" name="payment" value="Credit Card"> Credit Card</label><br/>
+    <label><input type="radio" name="payment" value="WeChat Pay"> WeChat Pay</label><br/>
+    <label><input type="radio" name="payment" value="Alipay"> Alipay</label><br/>
+  </div>
+
   <div class="actions">
-    <button onclick="alert('Proceeding to payment...')">Pay</button>
-    <button onclick="alert('Proceeding to checkout...')">Checkout</button>
+    <button onclick="handleCheckout()">Checkout</button>
   </div>
 
   <script>
-    // 示例商品数据
     const products = [
-      { name: "T-shirt", price: 19.99, quantity: 1 },
-      { name: "Jeans", price: 49.99, quantity: 2 },
-      { name: "Sneakers", price: 89.99, quantity: 1 }
+      { name: "T-shirt", price: 19.99, quantity: 1, stock: 5 },
+      { name: "Jeans", price: 49.99, quantity: 2, stock: 3 },
+      { name: "Sneakers", price: 89.99, quantity: 1, stock: 2 }
     ];
 
     const cartBody = document.getElementById("cart-body");
@@ -61,8 +68,9 @@
           <td>${product.name}</td>
           <td>$${product.price.toFixed(2)}</td>
           <td>
-            <input type="number" min="1" value="${product.quantity}" 
+            <input type="number" min="1" max="${product.stock}" value="${product.quantity}" 
                    onchange="updateQuantity(${index}, this.value)">
+            <small>(Max: ${product.stock})</small>
           </td>
           <td>$${subtotal.toFixed(2)}</td>
         `;
@@ -74,10 +82,31 @@
 
     function updateQuantity(index, newQty) {
       const qty = parseInt(newQty);
-      if (!isNaN(qty) && qty > 0) {
+      if (!isNaN(qty) && qty > 0 && qty <= products[index].stock) {
         products[index].quantity = qty;
         renderCart();
+      } else {
+        alert(`Invalid quantity. Max stock: ${products[index].stock}`);
       }
+    }
+
+    function getSelectedPaymentMethod() {
+      const radios = document.getElementsByName("payment");
+      for (let radio of radios) {
+        if (radio.checked) return radio.value;
+      }
+      return null;
+    }
+
+    function handleCheckout() {
+      const payment = getSelectedPaymentMethod();
+      if (!payment) {
+        alert("Please select a payment method.");
+        return;
+      }
+
+      const total = products.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      alert(`Payment method: ${payment}\nTotal amount: $${total.toFixed(2)}\nCheckout successful!`);
     }
 
     renderCart();
