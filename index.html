@@ -112,7 +112,18 @@
       const total = products.reduce((sum, item) => sum + item.price * item.quantity, 0);
       alert(`Payment method: ${payment}\nTotal amount: $${total.toFixed(2)}\nCheckout successful!`);
     }
-
+// 监听支付方式选择，控制二维码显示
+    document.querySelectorAll('input[name="payment"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const selected = getSelectedPaymentMethod();
+        const qrDiv = document.getElementById("wechat-qr");
+        if (selected === "WeChat Pay") {
+          qrDiv.style.display = "block";
+        } else {
+          qrDiv.style.display = "none";
+        }
+      });
+    });    
     renderCart();
   </script>
 </body>
