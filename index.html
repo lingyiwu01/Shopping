@@ -41,21 +41,21 @@
     <label><input type="radio" name="payment" value="Alipay"> Alipay</label><br/>
   </div>
   <div id="wechat-qr" class="payment-code" style="display: none; margin-top: 20px;">
-    <h3>扫码付款：</h3>
+    <h3>Please use WeChat to make a payment：：</h3>
     <img src="https://github.com/lingyiwu01/Shopping/blob/main/wechat-pay.png?raw=true" 
-         alt="微信付款码" width="200" />
+         alt="WeChat Payment code" width="200" />
   </div>
   <div class="actions">
     <button onclick="handleCheckout()">Checkout</button>
   </div>
   <div id="alipay-qr" style="display: none; margin-top: 20px;">
-  <h3>请用支付宝扫码付款：</h3>
+  <h3>Please use Alipay to make a payment：</h3>
   <img src="https://github.com/lingyiwu01/Shopping/blob/main/Alipay.png?raw=true"
-       alt="支付宝付款码" width="200" />
+       alt="Alipay payment code" width="200" />
   </div>
 <!-- 银行卡提示 -->
   <p id="card-tip" style="display: none; color: gray; margin-top: 20px;">
-    请在结账页面填写您的银行卡信息或联系客服完成支付。
+    Please click check and fill the info in the payment page!
   </p>
   <script>
     const products = [
