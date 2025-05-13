@@ -53,6 +53,10 @@
   <img src="https://github.com/lingyiwu01/Shopping/blob/main/Alipay.png?raw=true"
        alt="支付宝付款码" width="200" />
   </div>
+<!-- 银行卡提示 -->
+  <p id="card-tip" style="display: none; color: gray; margin-top: 20px;">
+    请在结账页面填写您的银行卡信息或联系客服完成支付。
+  </p>
   <script>
     const products = [
       { name: "Talk with me for 15 minutes", price: 4.99, quantity: 1, stock: 50 },
@@ -116,22 +120,30 @@
       const total = products.reduce((sum, item) => sum + item.price * item.quantity, 0);
       alert(`Payment method: ${payment}\nTotal amount: $${total.toFixed(2)}\nCheckout successful!`);
     }
-    
+
     document.querySelectorAll('input[name="payment"]').forEach(radio => {
       radio.addEventListener('change', () => {
         const selected = getSelectedPaymentMethod();
         const wechatDiv = document.getElementById("wechat-qr");
         const alipayDiv = document.getElementById("alipay-qr");
+        const cardTip = document.getElementById("card-tip");
 
         if (selected === "WeChat Pay") {
           wechatDiv.style.display = "block";
           alipayDiv.style.display = "none";
+          cardTip.style.display = "none";
         } else if (selected === "Alipay") {
           wechatDiv.style.display = "none";
           alipayDiv.style.display = "block";
+          cardTip.style.display = "none";
+        } else if (selected === "Bank Card" || selected === "Credit Card") {
+          wechatDiv.style.display = "none";
+          alipayDiv.style.display = "none";
+          cardTip.style.display = "block";
         } else {
           wechatDiv.style.display = "none";
           alipayDiv.style.display = "none";
+          cardTip.style.display = "none";
         }
       });
     });
